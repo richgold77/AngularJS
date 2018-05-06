@@ -1,0 +1,82 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="http://cdn.static.runoob.com/libs/angular.js/1.4.6/angular.min.js"></script>
+</head>
+<body ng-app="demo" ng-controller="demo">
+    <!--參考網址: https://segmentfault.com/q/1010000007226542-->
+    <div class="container">
+        <div class="row">
+            <div ng-class="colNum(row.width)" ng-repeat="row in list">
+                <div class="panel panel-default">
+                    <div class="panel-heading">{{ row.title }}</div>
+                    <div class="panel-body">{{ someText }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        var app = angular.module('demo', []);
+        app.controller('demo', function ($scope) {
+            $scope.list = [
+                {
+                    width: 3,
+                    title: "HAHA"
+                },
+                {
+                    title: "AAAA"
+                },
+                {
+                    title: "BBB"
+                },
+                {
+                    width: 1,
+                    title: "CCC"
+                },
+                {
+                    width: 4,
+                    title: "DDD"
+                },
+                {
+                    title: "AAAA"
+                },
+                {
+                    title: "BBB"
+                },
+                {
+                    width: 1,
+                    title: "CCC"
+                },
+                {
+                    width: 3,
+                    title: "DDD"
+                },
+                {
+                    width: 1,
+                    title: "CCC"
+                },
+                {
+                    width: 4,
+                    title: "DDD"
+                },
+                {
+                    title: "AAAA"
+                },
+                {
+                    title: "BBB"
+                }
+            ];
+            $scope.someText = "aaaaaaa aaaaaaaa aaaaaaaa aaaaaaa aaa aaaaaaaaaaaaaa aaaaaaaaaaa aaaaaaaaaaaa aaaaaa aaaaaaaaaa aaaaaaa aaaaaaaaaaaa aaaaaaaaa aaaaaaaaaaaaaaa aaaaaaaaa aaaaaaaaaa aaaaa aaaaaaa aaa ";
+            $scope.colNum = function (width) {
+                width = width || 2;
+                return "col-xs-" + width;
+            }
+        });
+    </script>
+
+</body>
+</html>

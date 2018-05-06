@@ -1,0 +1,41 @@
+﻿<!DOCTYPE html>
+<html ng-app="exampleApp">
+<head>
+    <meta charset="utf-8" />
+    <title>Forms</title>
+    <script src="../Scripts/angular.min.js"></script>
+    <link href="../Content/bootstrap.min.css" rel="stylesheet" />
+    <script>
+        angular.module("exampleApp", [])
+            .controller("defaultCtrl", function ($scope, $http) {
+                $http.get('/AngularJSEx1/Api/todos').then(function (response) {
+                    var jsonString = angular.toJson(response.data);
+                    $scope.todos = angular.fromJson(jsonString);
+                });
+
+
+            });
+    </script>
+</head>
+<body>
+    <div id="todoPanel" class="panel" ng-controller="defaultCtrl">
+        <h3 class="panel-heading">
+            To Do List
+            <span class="label label-info">
+                {{(todos | filter: {complete: 'false'}).length }}
+            </span>
+        </h3>
+        <table class="table">
+            <thead>
+                <tr><th>#</th><th>Action</th><th>Done</th></tr>
+            </thead>
+            <tr ng-repeat="item in todos">
+                <td>{{$index + 1}}</td>
+                <td>{{item.action}}</td>
+                <td>{{item.complete}}</td>
+            </tr>
+        </table>
+        <!--<pre>{{todos | json}}</pre>-->
+    </div>
+</body>
+</html>

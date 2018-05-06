@@ -1,0 +1,242 @@
+﻿<!DOCTYPE html>
+<html ng-app="exampleApp">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="../Scripts/angular.min.js"></script>
+    <link href="../Content/bootstrap.min.css" rel="stylesheet" />
+    <script src="../Scripts/jquery-1.10.2.min.js"></script>
+    <style>
+        td > *:first-child {
+            font-weight: bold
+        }
+
+        tr.Red {
+            background-color: lightcoral;
+        }
+
+        tr.Green {
+            background-color: lightgreen;
+        }
+
+        tr.Blue {
+            background-color: lightblue;
+        }
+
+        .Red {
+            background-color: lightcoral;
+        }
+
+        .Green {
+            background-color: lightgreen;
+        }
+
+        .Blue {
+            background-color: lightblue;
+        }
+    </style>
+    <script>
+        angular.module("exampleApp", [])
+            .controller("defaultCtrl", function ($scope, $http) {
+
+                $scope.todos = [
+                    { action: "Get groceries", complete: false },
+                    { action: "Call plumber", complete: false },
+                    { action: "Buy running shoes", complete: true },
+                    { action: "Buy flowers", complete: false },
+                    { action: "Call family", complete: false }];
+
+                $scope.buttonNames = ["Red", "Green", "Blue"];
+
+                $scope.dataValue = false;
+                $scope.dataHref = "entertainment";
+
+                //$scope.data = {
+                //    rowColor: "Blue",
+                //    columnColor: "Green"
+                //}
+
+                $scope.data = {
+                    rowColor: "Blue",
+                    columnColor: "Green"
+                };
+
+                $scope.handleEvent = function (e) {
+                    console.log("Event type: " + e.type);
+                    $scope.data.columnColor = e.type == "mouseover" ? "Green" : "Blue";
+                }
+
+
+                //$scope.handleEvent = function (e) {
+                //    console.log("Event type: " + e.type);
+                //    $scope.data.columnColor = e.type == "mouseover" ? "Green" : "Blue";
+                //}
+
+                //settings 物件
+                $scope.settings = {
+                    //Rows 屬性來設定表格中 tr 元素的背景顏色，並使用 Columns 屬性設定來 Done 欄位的背景顏色。
+                    Rows: "Red",
+                    Columns: "Green"
+                };
+
+                $scope.open = function () {
+                    window.open("https://tw.yahoo.com/");
+
+                    //$('#openWindow[@rel$=\'external\']').click(function () {
+                    //    this.target = "_blank";
+                    //});
+                }
+
+
+                $scope.message = "Tap Me!";
+            }).directive("tap", function () {   // 用 derective 方法來建立指令。這個指令名為 tap
+                // ，會回傳一個工廠函式，該函式會接著建立一個工作者函式來處理指令所套用到的元素。
+                return function (scope, elem, attrs) {
+                    elem.on("touchstart touchend", function () {
+
+                        // 處置器函式會呼叫 scope.$apply 方法來計算指令屬性值所定義的表達式
+                        // , 該屬性值是從屬性集合中取得的。
+                        scope.$apply(attrs["tap"]);
+                    });
+                }
+            });
+    </script>
+</head>
+<body>
+    <div id="todoPanel" class="panel" ng-controller="defaultCtrl">
+        <div class="checkbox well">
+            <label>
+                <input type="checkbox" ng-model="dataValue" />
+                Set the Data Value
+            </label>
+        </div>
+        <div>
+            <a class="col-sm-2" ng-href="https://tw.news.yahoo.com/{{dataHref}}" target="_blank">test ng-href</a>
+            <button class="btn btn-success col-sm-2" ng-disabled="dataValue">My button</button>
+        </div><br />
+        <div class="well" tap="message = 'Tapped!'">
+            {{message}}
+        </div>
+
+        <h3 class="panel-heading">Test repeat</h3>
+        <table class="table">
+            <thead>
+                <tr><th>#</th><th>Action</th><th>Done</th></tr>
+            </thead>
+            <!--<tr ng-repeat="item in todos" ng-class="data.rowColor" ng-mouseenter="handleEvent($event)"
+                ng-mouseleave="handleEvent($event)">-->
+            <tr>
+                <td>
+                    <label style="font-weight:400;" ng-repeat="item in todos"> {{item.action}}{{$last? '' : ','}} </label>
+                    
+                </td>
+                <td ng-repeat="item in todos">
+                    {{item.action}}
+                </td>
+                <!--<td>{{item.action}}</td>
+                <td ng-class="data.columnColor">{{item.complete}}</td>-->
+            </tr>
+            <tr ng-repeat="item in todos">
+                <!--{{item.action}}-->
+                test
+            </tr>
+        </table>
+
+        <h3 class="panel-heading">To Do List(Event)</h3>
+        <div class="well">
+            <!--套用至span元素上，而非直接套用在button元素上。這樣button之間會有間距-->
+            <span ng-repeat="button in buttonNames">
+                <button class="btn btn-info" ng-click="data.rowColor = button">
+                    {{button}}
+                </button>
+            </span>
+        </div>
+        <div ng-class="'Green'">
+            test color
+            <button id="openWindow" ng-class="'Red'" ng-click="open()">test color</button>
+            <a href="https://tw.yahoo.com/" rel="external">lepinskidesign.com.br</a>        </div>
+        <table class="table">
+            <thead>
+                <tr><th>#</th><th>Action</th><th>Done</th></tr>
+            </thead>
+            <tr ng-repeat="item in todos" ng-class="data.rowColor" ng-mouseenter="handleEvent($event)"
+                ng-mouseleave="handleEvent($event)">
+                <td>{{$index + 1}}</td>
+                <td>{{item.action}}</td>
+                <!--<td ng-class="data.columnColor">{{item.complete}}</td>-->
+                <td ng-class="data.columnColor">{{item.complete}}</td>
+
+            </tr>
+
+            <!--<tr ng-repeat="item in todos" ng-mouseenter="handleEvent($event)" ng-mouseleave="handleEvent($event)">
+            -->
+            <!--<tr ng-class="'Green'">
+            <td ng-class="'Green'">
+                test
+            </td>
+        </tr>
+        <tr>
+            <td>{{$index + 1}}</td>
+            <td>{{item.action}}</td>
+            <td ng-class="'Green'">{{item.complete}}</td>
+        </tr>-->
+
+        </table>
+
+
+
+        <h3 class="panel-heading">To Do List(Use ng-class & ng-style)</h3>
+        <div class="row well">
+            <!--建立兩組單選按鈕，並藉由 Bootstrap 網格做排列-->
+            <div class="col-xs-6" ng-repeat="(key, val) in settings">
+                <h4>{{key}}</h4>
+                <div class="radio" ng-repeat="button in buttonNames">
+                    <label>
+                        <input type="radio" ng-model="settings[key]" value="{{button}}" />
+                        {{button}}
+                    </label>
+                </div>
+            </div>
+        </div>
+        <table class="table">
+            <thead>
+                <tr><th>#</th><th>Action</th><th>Done</th></tr>
+            </thead>
+            <tr ng-repeat="item in todos" ng-class="settings.Rows">
+                <td>{{$index + 1}}</td>
+                <td>{{item.action}}</td>
+                <td ng-style="{'background-color': settings.Columns}">
+                    {{item.complete}}
+                </td>
+            </tr>
+        </table>
+
+
+
+        <h3 class="panel-heading">To Do List(Use ng-hide & ng-if)</h3>
+        <div class="checkbox well">
+            <label>
+                <input type="checkbox" ng-model="todos[2].complete" />
+                Item 3 is complete
+            </label>
+        </div>
+        <table class="table table-striped">
+            <thead>
+                <tr><th>#</th><th>Action</th><th>Done(ng-hide | ng-show)</th><th>Done(ng-if)</th></tr>
+            </thead>
+            <tr ng-repeat="item in todos | filter: {complete: 'false'}">
+                <td>{{$index + 1}}</td>
+                <td>{{item.action}}</td>
+                <td>
+                    <span ng-hide="item.complete">(Incomplete)</span>
+                    <span ng-show="item.complete">(Done)</span>
+                </td>
+                <td>
+                    <span ng-if="!item.complete">(Incomplete)</span>
+                    <span ng-if="item.complete">(Done)</span>
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>

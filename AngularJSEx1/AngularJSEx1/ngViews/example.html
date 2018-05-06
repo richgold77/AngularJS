@@ -1,0 +1,125 @@
+﻿<!DOCTYPE html>
+<html ng-app="exampleApp">
+<head>
+    <meta charset="utf-8" />
+    <title>AngularJS Demo</title>
+    <link href="../Content/bootstrap.min.css" rel="stylesheet" />
+    <script src="../Scripts/angular.min.js"></script>
+    <script src="controller.js"></script>
+    <script src="filters.js"></script>
+    <script>
+        var myApp = angular.module("exampleApp", ["exampleApp.Controllers", "exampleApp.Filters",
+            "exampleApp.Services", "exampleApp.Directives"]);
+
+        myApp.constant("startTime", new Date().toLocaleTimeString());
+        myApp.config(function (startTime) {
+            console.log("Main module config: " + startTime);
+        });
+        myApp.run(function (startTime) {
+            console.log("Main module run: " + startTime);
+        });
+
+        angular.module("exampleApp.Directives", [])
+            .directive("highlight", function ($filter) {
+                var dayFilter = $filter("dayName");
+                return function (scope, element, attrs) {
+                    if (dayFilter(scope.day) == attrs["highlight"]) {
+                        element.css("color", "red");
+                    }
+                }
+            });
+
+        var now = new Date();
+        myApp.value("nowValue", now);
+
+        angular.module("exampleApp.Services", [])
+            .service("days", function (nowValue) {
+                this.today = nowValue.getDay();
+                this.tomorrow = this.today + 1;
+            })
+            .config(function () {
+                console.log("Services module config: (no time)");
+            })
+            .run(function (startTime) {
+                console.log("Services module run: " + startTime);
+            });
+
+        //// 藉由宣告對 days 服務的依賴，便能夠存取該服務。
+        //myApp.controller("dayCtrl", function ($scope, days) {
+        //    //var dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        //    //$scope.day = dayNames[new Date().getDay()];
+
+        //    //$scope.day = new Date().getDay();
+
+        //    // AngularJS 會使用依賴注入來尋找 days 服務，並傳遞給工廠函式，讓我可以取得 today 和 tomorrow
+        //    // 屬性的值。
+        //    $scope.day = days.today;
+
+        //    //$scope.tomorrow = dayNames[(new Date().getDay() + 1) % 7];
+        //});
+
+        //myApp.controller("tomorrowCtrl", function ($scope, days) {
+        //    //var dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        //    //$scope.day = dayNames[(new Date().getDay() + 1) % 7];
+
+        //    //$scope.day = new Date().getDay() + 1;
+        //    $scope.day = days.tomorrow;
+
+        //});
+
+        //myApp.directive("highlight", function ($filter) {
+        //    var dayFilter = $filter("dayName");
+
+        //    // 1. scope 參數是用於取得檢視中的可用資料。
+        //    // 2. attrs 參數則提供了目標元素的完整屬性集合，包括用於套用自訂指令的屬性，因此就可以從中取得
+        //    //    highlight 屬性的值。
+        //    // 3. 如果 highlight 屬性值相等於作用範圍的 day 變數值，就會使用 element 參數來設定 HTML 內容。
+        //    return function (scope, element, attrs) {
+        //        console.log('scope.day: ' + scope.day);
+        //        //if (scope.day == attrs["highlight"]) {
+        //        if (dayFilter(scope.day) == attrs["highlight"]) {
+        //            element.css("color", "red");
+        //        }
+        //    }
+        //});
+
+        //myApp.filter("dayName", function () {
+
+        //    var dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        //    return function (input) {
+        //        return angular.isNumber(input) ? dayNames[input] : input;
+        //    };
+        //});
+
+        //// Module.value 方法會建立一種服務，是僅僅回傳固定的值或物件。
+        //// 這表示你可以將任何值或物件作為依賴注入，而非只能在使用 module 方法(ex. service 和 filter) 時，
+        //// 一併取得所需的所有物件
+        //var now = new Date();
+        //myApp.value("nowValue", now);
+
+        //myApp.service("days", function (nowValue) {
+        //    this.today = nowValue.getDay();
+        //    this.tomorrow = this.today + 1;
+        //});
+    </script>
+</head>
+<body>
+    <div class="panel">
+        <div class="page-header">
+            <h3>AngularJS App</h3>
+        </div>
+        <!--當AngularJS 在 HTML 中遇到 highlight 屬性時，便會呼叫先前傳給 directive 方法的工廠函式
+        ， 接著呼叫由工廠函式所建立的指令函式，並傳入三個參數，分別是檢視的作用範圍、指令所套用到的元素
+        以及該元素的屬性。-->
+        <h4 ng-controller="dayCtrl" highlight="Sunday">
+            Today is {{day | dayName}}
+
+            <!--<pre>{{day | json}}</pre>-->
+        </h4>
+        <h4 ng-controller="tomorrowCtrl" highlight="Monday">
+            Tomorrow is {{day || "(unknown)" | dayName}}
+        </h4>
+
+    </div>
+</body>
+</html>

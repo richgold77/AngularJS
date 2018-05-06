@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+      <s:element name="HourTOMinu">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="inttime" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="HourTOMinuResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="HourTOMinuResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="MinuToHour">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="intTime" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="MinuToHourResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="MinuToHourResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="FahrenheitToCelsius">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="Fahrenheit" type="s:double" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="FahrenheitToCelsiusResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="FahrenheitToCelsiusResult" type="s:double" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CelsiusToFahrenheit">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="Celsius" type="s:double" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CelsiusToFahrenheitResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="CelsiusToFahrenheitResult" type="s:double" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="HourTOMinuSoapIn">
+    <wsdl:part name="parameters" element="tns:HourTOMinu" />
+  </wsdl:message>
+  <wsdl:message name="HourTOMinuSoapOut">
+    <wsdl:part name="parameters" element="tns:HourTOMinuResponse" />
+  </wsdl:message>
+  <wsdl:message name="MinuToHourSoapIn">
+    <wsdl:part name="parameters" element="tns:MinuToHour" />
+  </wsdl:message>
+  <wsdl:message name="MinuToHourSoapOut">
+    <wsdl:part name="parameters" element="tns:MinuToHourResponse" />
+  </wsdl:message>
+  <wsdl:message name="FahrenheitToCelsiusSoapIn">
+    <wsdl:part name="parameters" element="tns:FahrenheitToCelsius" />
+  </wsdl:message>
+  <wsdl:message name="FahrenheitToCelsiusSoapOut">
+    <wsdl:part name="parameters" element="tns:FahrenheitToCelsiusResponse" />
+  </wsdl:message>
+  <wsdl:message name="CelsiusToFahrenheitSoapIn">
+    <wsdl:part name="parameters" element="tns:CelsiusToFahrenheit" />
+  </wsdl:message>
+  <wsdl:message name="CelsiusToFahrenheitSoapOut">
+    <wsdl:part name="parameters" element="tns:CelsiusToFahrenheitResponse" />
+  </wsdl:message>
+  <wsdl:portType name="WebService_2Soap">
+    <wsdl:operation name="HourTOMinu">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">時間單位轉換程式：小時數轉換成為分鐘數</wsdl:documentation>
+      <wsdl:input message="tns:HourTOMinuSoapIn" />
+      <wsdl:output message="tns:HourTOMinuSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="MinuToHour">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">時間單位轉換程式：分鐘數轉換成為小時數</wsdl:documentation>
+      <wsdl:input message="tns:MinuToHourSoapIn" />
+      <wsdl:output message="tns:MinuToHourSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="FahrenheitToCelsius">
+      <wsdl:input message="tns:FahrenheitToCelsiusSoapIn" />
+      <wsdl:output message="tns:FahrenheitToCelsiusSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CelsiusToFahrenheit">
+      <wsdl:input message="tns:CelsiusToFahrenheitSoapIn" />
+      <wsdl:output message="tns:CelsiusToFahrenheitSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="WebService_2Soap" type="tns:WebService_2Soap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="HourTOMinu">
+      <soap:operation soapAction="http://tempuri.org/HourTOMinu" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MinuToHour">
+      <soap:operation soapAction="http://tempuri.org/MinuToHour" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="FahrenheitToCelsius">
+      <soap:operation soapAction="http://tempuri.org/FahrenheitToCelsius" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CelsiusToFahrenheit">
+      <soap:operation soapAction="http://tempuri.org/CelsiusToFahrenheit" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="WebService_2Soap12" type="tns:WebService_2Soap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="HourTOMinu">
+      <soap12:operation soapAction="http://tempuri.org/HourTOMinu" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MinuToHour">
+      <soap12:operation soapAction="http://tempuri.org/MinuToHour" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="FahrenheitToCelsius">
+      <soap12:operation soapAction="http://tempuri.org/FahrenheitToCelsius" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CelsiusToFahrenheit">
+      <soap12:operation soapAction="http://tempuri.org/CelsiusToFahrenheit" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="WebService_2">
+    <wsdl:port name="WebService_2Soap" binding="tns:WebService_2Soap">
+      <soap:address location="http://localhost:82/WebService/WebService_2.asmx" />
+    </wsdl:port>
+    <wsdl:port name="WebService_2Soap12" binding="tns:WebService_2Soap12">
+      <soap12:address location="http://localhost:82/WebService/WebService_2.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

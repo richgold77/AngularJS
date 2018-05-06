@@ -1,0 +1,185 @@
+﻿<!DOCTYPE html>
+<html ng-app="exampleApp">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="../Scripts/angular.min.js"></script>
+    <link href="../Content/bootstrap.min.css" rel="stylesheet" />
+    <link rel="icon" href="../Images/icon/share_black_18dp.png" />
+    <style>
+        .odd{background-color: lightcoral}
+        .even{background-color: lavenderblush}
+    </style>
+    <script>
+        angular.module("exampleApp", [])
+            // 各頁能夠顯示的商品數目會被定義在常數 productListPageCount 中，
+            .constant("productListPageCount", 3)
+
+            .controller("defaultCtrl", function ($scope, $http, productListPageCount) {
+
+                // 定義常數值，這樣就可以在檢視中存取它。
+                $scope.selectedPage = 1;
+                // 作為當前被選取的頁面值。
+                $scope.pageSize = productListPageCount;
+
+
+                $http.get('/AngularJSEx1/Api/DownloadsWebsite').then(function (response) {
+                    var jsonString = angular.toJson(response.data);
+                    //console.log(jsonString);
+                    $scope.websites = angular.fromJson(jsonString);
+                });
+
+
+                $scope.getData = function () {
+                    $http.get('/AngularJSEx1/Api/temp2017_1').then(function (response) {
+                        var jsonString = angular.toJson(response.data);
+                        //console.log(jsonString);
+                        $scope.todos = angular.fromJson(jsonString);
+                        //console.log(todos);
+                    });
+
+                }
+
+                var cssFlag = 0;
+                $scope.checkCss_1 = true;
+
+
+                $scope.sendTemp = function (tempData) {
+                    cssFlag++;
+                    if (cssFlag % 2 == 0) {
+                        $scope.checkCss_1 = true;
+                    }
+                    else {
+                        $scope.checkCss_1 = false;
+                    }
+
+                    // 用copy 工具方法來建立貨運詳情物件的複本
+                    var temp = angular.copy(tempData);
+                    //order.products = cart.getProducts();
+                    //console.log(temp);
+
+                    $http.post('/AngularJSEx1/Api/temp2017_1', temp).then(function (response) {
+                        // 回傳參照用的 id 屬性
+                        //console.log("id : " + response.data);
+                        $scope.data.orderId = response.data;
+                        //cart.getProducts().length = 0;
+                        $scope.data.temp.password = "";
+                        $scope.data.temp.website = "";
+                    })
+                        .catch(function (error) {
+                            $scope.data.orderError = error;
+                        })
+                        .finally(function () {
+                            $scope.getData();
+                        });
+                }
+
+                $scope.getData();
+
+                //用於變更選取的頁面值。
+                $scope.selectPage = function (newPage) {
+                    $scope.selectedPage = newPage;
+                }
+
+                // 將搭配 ng-class 指令來突顯被選取的頁面，如同先前處理被選取分類的方式。
+                $scope.getPageClass = function (page) {
+                    return $scope.selectedPage == page ? productListActiveClass : "";
+                }
+
+            });
+                //.controller("dataCtrl", function ($scope, $http) {
+                //    $http.get('/AngularJSEx1/Api/temp2017_1').then(function (response) {
+                //        var jsonString = angular.toJson(response.data);
+                //        console.log(jsonString);
+                //        $scope.todos = angular.fromJson(jsonString);
+                //    });
+                //});
+    </script>
+</head>
+<body>
+    <div id="todoPanel" class="panel" ng-controller="defaultCtrl">
+        <form name="myForm" novalidate>
+            <div class="well">
+                <div class="form-group">
+                    <div class="row grid-row">
+                        <div class="col col-xs-2">
+                            <label>Select a Website:</label>
+                            <select ng-model="data.temp.website" ng-options="item.websiteName as item.websiteName for item in websites">
+                                <option value="">pick up</option>
+                            </select>
+                        </div>
+                        <div class="form-group well col-xs-10">
+                            <label for="password">Password:</label>
+                            <!--在 input 元素中輸入值時，該值就會被指派給 ng-model 指令所指定的作用範圍屬性， -->
+                            <!--在本例中即是 data.shipping.name 屬性和 data.shipping.street 屬性。 -->
+                            <input name="password" class="form-control" ng-model="data.temp.password" />
+                        </div>
+                        <!--<button ng-click="sendTemp(data.temp)" class="btn btn-primary col col-xs-1">Complete order</button>-->
+                    </div>
+                </div>
+            </div>
+
+            <!--<div class="row grid-row">
+                <div class="col-xs-1">1</div>
+                <div class="col-xs-2">2</div>
+                <div class="col-xs-9">1</div>
+
+            </div>-->
+
+
+        <div class="text-center">
+            <button ng-click="sendTemp(data.temp)"  ng-class="checkCss_1 ? 'btn btn-primary' : 'btn btn-success'">
+                Complete order
+            </button>
+        </div>
+
+            <h3 class="panel-heading">temp data</h3>
+            <div class="well">
+                <!--<div>The first item is: {{todos[0].password}}</div>-->
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>id</th>
+                            <th>rec_time</th>
+                            <th>website</th>
+                            <th>password</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="item in todos" ng-class="$odd ? 'odd' : 'even'">
+                            <td class="text-center">{{item.id}}</td>
+                            <td class="text-center">{{item.rec_time | date:'short'}}</td>
+                            <td class="text-center">{{item.website}}</td>
+                            <td class="text-center">{{item.password}}</td>
+                            <!--<td class="text-center">{{item.rec_time}}</td>
+                    <td class="text-center">{{item.website}}</td>-->
+                            <td><!--{{(item.password}}--></td>
+                        </tr>
+                    </tbody>
+
+                    <!--<tfoot>
+                <tr>
+                    <td colspan="3" class="text-right">Total:</td>
+                    <td class="text-right">
+                        {{total() | currency}}
+                    </td>
+                </tr>
+            </tfoot>-->
+                </table>
+            </div>
+            <div class="pull-right btn-group">
+                <a ng-repeat="page in todos | pageCount:pageSize" ng-click="selectPage($index + 1)"
+                   class="btn btn-default">
+                    {{$index + 1}}
+                </a>
+            </div>
+
+            <!--<div class="well">
+                <p>Selected: {{data.temp || 'None'}}</p>
+            </div>-->
+
+            <!--<pre>{{todos|json}}</pre>-->
+        </form>
+    </div>
+</body>
+</html>
